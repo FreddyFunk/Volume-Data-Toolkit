@@ -1,0 +1,9 @@
+[submodule "external/bitmap/bitmap"]
+	path = external/bitmap/bitmap
+	url = https://github.com/ArashPartow/bitmap.git
+[submodule "external/libbmpread/libbmpread"]
+	path = external/libbmpread/libbmpread
+	url = https://github.com/chazomaticus/libbmpread.git
+[submodule "external/threadpool/threadpool"]
+	path = external/threadpool/threadpool
+	url = https://github.com/progschj/ThreadPool.git
