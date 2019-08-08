@@ -7,7 +7,7 @@ public:
     InvertVoxelFilter();
     ~InvertVoxelFilter();
 
-    static const void invertVoxelData(VolumeData& volume);
+    static void invertVoxelData(VolumeData& volume);
 
 private:
 };

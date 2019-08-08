@@ -9,10 +9,10 @@ VolumeResizer::VolumeResizer() {}
 
 VolumeResizer::~VolumeResizer() {}
 
-const void VolumeResizer::scaleSliceX(const VolumeData* const volume, VolumeData* volumeScaled,
-                                      const VDTK::Vector3D<float> scale,
-                                      const InterpolationMode interpolationMode,
-                                      const float scaledPositionX) {
+void VolumeResizer::scaleSliceX(const VolumeData* const volume, VolumeData* volumeScaled,
+                                const VDTK::Vector3D<float> scale,
+                                const InterpolationMode interpolationMode,
+                                const float scaledPositionX) {
     const float originalSizeX = static_cast<float>(volume->getSize().getX());
     const float originalSizeY = static_cast<float>(volume->getSize().getY());
     const float originalSizeZ = static_cast<float>(volume->getSize().getZ());
@@ -54,9 +54,9 @@ const void VolumeResizer::scaleSliceX(const VolumeData* const volume, VolumeData
     }
 }
 
-const void VolumeResizer::scaleVolume(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
-                                      const InterpolationMode interpolationMode,
-                                      const std::size_t numberOfThreads) {
+void VolumeResizer::scaleVolume(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
+                                const InterpolationMode interpolationMode,
+                                const std::size_t numberOfThreads) {
     const float originalSizeX = static_cast<float>(volume->getSize().getX());
     const float originalSizeY = static_cast<float>(volume->getSize().getY());
     const float originalSizeZ = static_cast<float>(volume->getSize().getZ());
@@ -93,21 +93,19 @@ const void VolumeResizer::scaleVolume(VolumeData* const volume, const VDTK::Vect
     *volume = volumeScaled;
 }
 
-const void VolumeResizer::scaleNearestNeighbor(VolumeData* const volume,
-                                               const VDTK::Vector3D<float>& scale,
-                                               const std::size_t numberOfThreads) {
+void VolumeResizer::scaleNearestNeighbor(VolumeData* const volume,
+                                         const VDTK::Vector3D<float>& scale,
+                                         const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Nearest, numberOfThreads);
 }
 
-const void VolumeResizer::scaleTrilinear(VolumeData* const volume,
-                                         const VDTK::Vector3D<float>& scale,
-                                         const std::size_t numberOfThreads) {
+void VolumeResizer::scaleTrilinear(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
+                                   const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Trilinear, numberOfThreads);
 }
 
-const void VolumeResizer::scaleTricubic(VolumeData* const volume,
-                                        const VDTK::Vector3D<float>& scale,
-                                        const std::size_t numberOfThreads) {
+void VolumeResizer::scaleTricubic(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
+                                  const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Tricubic, numberOfThreads);
 }
 
@@ -129,26 +127,25 @@ const void VolumeResizer::scaleTricubic(VolumeData* const volume,
 p(x,y,z) is inside of this cube
 -------------------------------------------------*/
 
-const float VolumeResizer::getNearestNeigborValue(const VolumeData* const volume,
-                                                  const VDTK::Vector3D<float>& originalPosition) {
+float VolumeResizer::getNearestNeigborValue(const VolumeData* const volume,
+                                            const VDTK::Vector3D<float>& originalPosition) {
     return volume->getVoxelValue(std::round(originalPosition.getX()),
                                  std::round(originalPosition.getY()),
                                  std::round(originalPosition.getZ()));
 }
 
-const inline float VolumeResizer::interpolateLinear(const std::array<float, 2>& values,
-                                                    const float x) {
+inline float VolumeResizer::interpolateLinear(const std::array<float, 2>& values, const float x) {
     return values[0] * (1.0f - x) + values[1] * x;
 }
 
-const inline float VolumeResizer::interpolateBilinear(
+inline float VolumeResizer::interpolateBilinear(
     const std::array<std::array<float, 2>, 2>& valuePlane, const float x, const float y) {
     const std::array<float, 2> values = {interpolateLinear(valuePlane[0], y),
                                          interpolateLinear(valuePlane[1], y)};
     return interpolateLinear(values, x);
 }
 
-const inline float VolumeResizer::interpolateTrilinear(
+inline float VolumeResizer::interpolateTrilinear(
     const std::array<std::array<std::array<float, 2>, 2>, 2>& valueGrid, const float x,
     const float y, const float z) {
     const std::array<float, 2> values = {interpolateBilinear(valueGrid[0], y, z),
@@ -156,9 +153,9 @@ const inline float VolumeResizer::interpolateTrilinear(
     return interpolateLinear(values, x);
 }
 
-const float VolumeResizer::getTrilinearInterpolatedValue(
-    const VolumeData* const volume, const VDTK::Vector3D<float>& originalSize,
-    const VDTK::Vector3D<float>& originalPosition) {
+float VolumeResizer::getTrilinearInterpolatedValue(const VolumeData* const volume,
+                                                   const VDTK::Vector3D<float>& originalSize,
+                                                   const VDTK::Vector3D<float>& originalPosition) {
     const float x0 = std::floor(originalPosition.getX());
     const float y0 = std::floor(originalPosition.getY());
     const float z0 = std::floor(originalPosition.getZ());
@@ -187,8 +184,7 @@ const float VolumeResizer::getTrilinearInterpolatedValue(
                                 originalPosition.getY() - y0, originalPosition.getZ() - z0);
 }
 
-inline const float VolumeResizer::interpolateCubic(const std::array<float, 4>& values,
-                                                   const float x) {
+inline float VolumeResizer::interpolateCubic(const std::array<float, 4>& values, const float x) {
     return values[1] +
            0.5f * x *
                (values[2] - values[0] +
@@ -196,7 +192,7 @@ inline const float VolumeResizer::interpolateCubic(const std::array<float, 4>& v
                      x * (3.0f * (values[1] - values[2]) + values[3] - values[0])));
 }
 
-inline const float VolumeResizer::interpolateBicubic(
+inline float VolumeResizer::interpolateBicubic(
     const std::array<std::array<float, 4>, 4>& valuePlane, const float x, const float y) {
     const std::array<float, 4> values = {
         interpolateCubic(valuePlane[0], y), interpolateCubic(valuePlane[1], y),
@@ -204,7 +200,7 @@ inline const float VolumeResizer::interpolateBicubic(
     return interpolateCubic(values, x);
 }
 
-inline const float VolumeResizer::interpolateTricubic(
+inline float VolumeResizer::interpolateTricubic(
     const std::array<std::array<std::array<float, 4>, 4>, 4>& valueGrid, const float x,
     const float y, const float z) {
     const std::array<float, 4> values = {
@@ -213,9 +209,9 @@ inline const float VolumeResizer::interpolateTricubic(
     return interpolateCubic(values, x);
 }
 
-const float VolumeResizer::getTricubicInterpolatedValue(
-    const VolumeData* const volume, const VDTK::Vector3D<float>& originalSize,
-    const VDTK::Vector3D<float>& originalPosition) {
+float VolumeResizer::getTricubicInterpolatedValue(const VolumeData* const volume,
+                                                  const VDTK::Vector3D<float>& originalSize,
+                                                  const VDTK::Vector3D<float>& originalPosition) {
     const float x0 = std::floor(originalPosition.getX());
     const float y0 = std::floor(originalPosition.getY());
     const float z0 = std::floor(originalPosition.getZ());

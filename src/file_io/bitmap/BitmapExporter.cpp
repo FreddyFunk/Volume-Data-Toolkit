@@ -8,8 +8,8 @@
 #include "BitmapExporter.h"
 
 namespace VDTK {
-const bool BitmapExporter::writeColor(const std::filesystem::path& directoryPath,
-                                      const VolumeData& volume) {
+bool BitmapExporter::writeColor(const std::filesystem::path& directoryPath,
+                                const VolumeData& volume) {
     writeAxis(directoryPath, volume, VolumeAxis::YZAxis, PixelMode::RGBColor);
     writeAxis(directoryPath, volume, VolumeAxis::XZAxis, PixelMode::RGBColor);
     writeAxis(directoryPath, volume, VolumeAxis::XYAxis, PixelMode::RGBColor);
@@ -18,8 +18,8 @@ const bool BitmapExporter::writeColor(const std::filesystem::path& directoryPath
     return true;
 }
 
-const bool BitmapExporter::writeMonochrom(const std::filesystem::path& directoryPath,
-                                          const VolumeData& volume) {
+bool BitmapExporter::writeMonochrom(const std::filesystem::path& directoryPath,
+                                    const VolumeData& volume) {
     writeAxis(directoryPath, volume, VolumeAxis::YZAxis, PixelMode::RGBMonochrom);
     writeAxis(directoryPath, volume, VolumeAxis::XZAxis, PixelMode::RGBMonochrom);
     writeAxis(directoryPath, volume, VolumeAxis::XYAxis, PixelMode::RGBMonochrom);
@@ -55,9 +55,8 @@ inline const std::vector<char> BitmapExporter::convertToRGBMonochrom(const uint1
     return pixel;
 }
 
-const void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath,
-                                     const VolumeData& volume, VolumeAxis axis,
-                                     const PixelMode pixelMode) {
+void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath, const VolumeData& volume,
+                               VolumeAxis axis, const PixelMode pixelMode) {
     // Function pointer for the selected pixel mode
     const std::vector<char> (*convertToPixel)(uint16_t) = nullptr;
     switch (pixelMode) {
@@ -98,10 +97,10 @@ const void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath,
     }
 }
 
-const void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToPixel)(uint16_t),
-                                            const std::filesystem::path& directoryPath,
-                                            const VolumeData& volume, VolumeAxis axis,
-                                            const std::size_t sliceIndex) {
+void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToPixel)(uint16_t),
+                                      const std::filesystem::path& directoryPath,
+                                      const VolumeData& volume, VolumeAxis axis,
+                                      const std::size_t sliceIndex) {
     std::string fileName = {};
 
     // TODO: move to own function

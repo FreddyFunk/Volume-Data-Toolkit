@@ -7,11 +7,10 @@ BinarySliceImporter::BinarySliceImporter() {}
 
 BinarySliceImporter::~BinarySliceImporter() {}
 
-const bool BinarySliceImporter::import(VolumeData* const volumeData,
-                                       const std::filesystem::path& directoryPath,
-                                       const uint8_t bitsPerVoxel, const VolumeAxis axis,
-                                       const VDTK::VolumeSize size,
-                                       const VDTK::VolumeSpacing spacing) {
+bool BinarySliceImporter::import(VolumeData* const volumeData,
+                                 const std::filesystem::path& directoryPath,
+                                 const uint8_t bitsPerVoxel, const VolumeAxis axis,
+                                 const VDTK::VolumeSize size, const VDTK::VolumeSpacing spacing) {
     if (!std::filesystem::exists(directoryPath)) {
         // Directory does not exist
         return false;
@@ -59,10 +58,10 @@ const bool BinarySliceImporter::import(VolumeData* const volumeData,
     return true;
 }
 
-const bool BinarySliceImporter::loadSlice(VolumeSlice* const volumeSlice,
-                                          const std::filesystem::path& filePath,
-                                          const uint8_t bitsPerVoxel, const VolumeAxis axis,
-                                          const std::size_t width, const std::size_t height) {
+bool BinarySliceImporter::loadSlice(VolumeSlice* const volumeSlice,
+                                    const std::filesystem::path& filePath,
+                                    const uint8_t bitsPerVoxel, const VolumeAxis axis,
+                                    const std::size_t width, const std::size_t height) {
     std::size_t fileSize = 0;
     try {
         fileSize = std::filesystem::file_size(filePath);

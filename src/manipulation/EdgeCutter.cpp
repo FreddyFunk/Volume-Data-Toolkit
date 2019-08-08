@@ -6,7 +6,7 @@ EdgeCutter::EdgeCutter() {}
 
 EdgeCutter::~EdgeCutter() {}
 
-const void EdgeCutter::cutBorders(VolumeData* const volume, const uint16_t threshold) {
+void EdgeCutter::cutBorders(VolumeData* const volume, const uint16_t threshold) {
     std::size_t lowerBorderX = 0;
     std::size_t upperBorderX = 0;
     std::size_t lowerBorderY = 0;
