@@ -66,9 +66,9 @@ inline const uint16_t BitmapImporter::pixelRGBMonochromToVoxel(const std::vector
     return static_cast<uint16_t>(rawPixel);
 }
 
-const uint32_t BitmapImporter::getNumberOfBitmapsInDirectory(
+const std::size_t BitmapImporter::getNumberOfBitmapsInDirectory(
     const std::filesystem::path& directoryPath) {
-    uint32_t numberOfBitmaps = 0;
+    std::size_t numberOfBitmaps = 0;
     for (const auto& directoryEntry : std::filesystem::directory_iterator(directoryPath)) {
         const bool isFile = std::filesystem::is_regular_file(directoryEntry);
         const bool isBitmap =
@@ -148,7 +148,7 @@ const bool BitmapImporter::import(VolumeData* const volumeData,
 
     VolumeData volume(calculateVolumeSize(directoryPath, axis), spacing);
 
-    uint32_t sliceIndex = 0;
+    std::size_t sliceIndex = 0;
     for (const auto& directoryEntry : std::filesystem::directory_iterator(directoryPath)) {
         const bool isFile = std::filesystem::is_regular_file(directoryEntry);
         const bool isBitmap =
@@ -160,8 +160,9 @@ const bool BitmapImporter::import(VolumeData* const volumeData,
             VolumeSlice slice(axis, bitmap.width, bitmap.height);
 
             // fill slice with bitmap pixel
-            for (uint32_t width = 0; width < static_cast<uint32_t>(bitmap.width); width++) {
-                for (uint32_t height = 0; height < static_cast<uint32_t>(bitmap.height); height++) {
+            for (std::size_t width = 0; width < static_cast<std::size_t>(bitmap.width); width++) {
+                for (std::size_t height = 0; height < static_cast<std::size_t>(bitmap.height);
+                     height++) {
                     // By default, each pixel spans three bytes: the red, green, and blue
                     // color components in that order
 

@@ -23,7 +23,8 @@ private:
     // value
     static inline const uint16_t pixelRGBMonochromToVoxel(const std::vector<char> pixel);
 
-    static const uint32_t getNumberOfBitmapsInDirectory(const std::filesystem::path& directoryPath);
+    static const std::size_t getNumberOfBitmapsInDirectory(
+        const std::filesystem::path& directoryPath);
     static const VDTK::VolumeSize calculateVolumeSize(const std::filesystem::path& directoryPath,
                                                       const VolumeAxis axis);
     static const bool import(VolumeData* const volumeData,

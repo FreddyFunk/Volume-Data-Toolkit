@@ -11,11 +11,11 @@ public:
 
     static const void scaleNearestNeighbor(VolumeData* const volume,
                                            const VDTK::Vector3D<float>& scale,
-                                           const uint32_t numberOfThreads);
+                                           const std::size_t numberOfThreads);
     static const void scaleTrilinear(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
-                                     const uint32_t numberOfThreads);
+                                     const std::size_t numberOfThreads);
     static const void scaleTricubic(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
-                                    const uint32_t numberOfThreads);
+                                    const std::size_t numberOfThreads);
 
 private:
     enum class InterpolationMode { Nearest, Trilinear, Tricubic };
@@ -27,7 +27,7 @@ private:
 
     static const void scaleVolume(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
                                   const InterpolationMode interpolationMode,
-                                  const uint32_t numberOfThreads);
+                                  const std::size_t numberOfThreads);
 
     // Nearest neighbor interpolation
     static const float getNearestNeigborValue(const VolumeData* const volume,

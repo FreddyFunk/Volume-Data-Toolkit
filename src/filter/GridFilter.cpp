@@ -9,7 +9,7 @@ GridFilter::GridFilter() {}
 GridFilter::~GridFilter() {}
 
 void GridFilter::applyFilter(VolumeData* const volume, const VDTK::FilterKernel& filter,
-                             const uint32_t numberOfThreads) {
+                             const std::size_t numberOfThreads) {
     VolumeData filteredVolume = *volume;
 
     {
@@ -19,7 +19,7 @@ void GridFilter::applyFilter(VolumeData* const volume, const VDTK::FilterKernel&
 
         // scale each x slice using seperate threads
         // we still use tri-XY and not bi-XY interpolation
-        for (uint32_t x = 0; x < volume->getSize().getX(); x++) {
+        for (std::size_t x = 0; x < volume->getSize().getX(); x++) {
             threadPool.enqueue(&GridFilter::applyFilterToSliceX, volume, &filteredVolume, filter,
                                x);
         }
@@ -30,9 +30,10 @@ void GridFilter::applyFilter(VolumeData* const volume, const VDTK::FilterKernel&
 
 void GridFilter::applyFilterToSliceX(const VolumeData* const volume,
                                      VolumeData* const filteredVolume,
-                                     const VDTK::FilterKernel& filter, const uint32_t positionX) {
-    for (uint32_t y = 0; y < volume->getSize().getY(); y++) {
-        for (uint32_t z = 0; z < volume->getSize().getZ(); z++) {
+                                     const VDTK::FilterKernel& filter,
+                                     const std::size_t positionX) {
+    for (std::size_t y = 0; y < volume->getSize().getY(); y++) {
+        for (std::size_t z = 0; z < volume->getSize().getZ(); z++) {
             filteredVolume->setVoxelValue(positionX, y, z,
                                           getNewVoxelValue(volume, positionX, y, z, filter));
         }
@@ -43,9 +44,9 @@ const uint16_t GridFilter::filterGridAverage(
     const std::vector<std::vector<std::vector<double>>>& filterGridValues) {
     double average = 0;
 
-    for (uint32_t x = 0; x < filterGridValues.size(); x++) {
-        for (uint32_t y = 0; y < filterGridValues.data()->size(); y++) {
-            for (uint32_t z = 0; z < filterGridValues.data()->data()->size(); z++) {
+    for (std::size_t x = 0; x < filterGridValues.size(); x++) {
+        for (std::size_t y = 0; y < filterGridValues.data()->size(); y++) {
+            for (std::size_t z = 0; z < filterGridValues.data()->data()->size(); z++) {
                 average += filterGridValues[x][y][z];
             }
         }
@@ -60,8 +61,8 @@ const uint16_t GridFilter::filterGridAverage(
     }
 }
 
-const uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, const uint32_t x,
-                                            const uint32_t y, const uint32_t z,
+const uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, const std::size_t x,
+                                            const std::size_t y, const std::size_t z,
                                             const VDTK::FilterKernel& filter) {
     // stores values of filter grid when applied to volume data
     std::vector<std::vector<std::vector<double>>> filterGridValues(
@@ -70,14 +71,17 @@ const uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, cons
                                          std::vector<double>(filter.getKernelSize(), 0.0)));
 
     // iterate over whole volume grid
-    for (uint32_t filterX = 0; filterX < filter.getKernelSize(); filterX++) {
-        for (uint32_t filterY = 0; filterY < filter.getKernelSize(); filterY++) {
-            for (uint32_t filterZ = 0; filterZ < filter.getKernelSize(); filterZ++) {
-                const int32_t filterGridOffset = filter.getKernelSize() / 2;
+    for (std::size_t filterX = 0; filterX < filter.getKernelSize(); filterX++) {
+        for (std::size_t filterY = 0; filterY < filter.getKernelSize(); filterY++) {
+            for (std::size_t filterZ = 0; filterZ < filter.getKernelSize(); filterZ++) {
+                const int64_t filterGridOffset = static_cast<int64_t>(filter.getKernelSize() / 2);
                 // calculate volume position from current filter grid position
-                const int32_t volumePositionX = x + (filterX - filterGridOffset);
-                const int32_t volumePositionY = y + (filterY - filterGridOffset);
-                const int32_t volumePositionZ = z + (filterZ - filterGridOffset);
+                const int64_t volumePositionX =
+                    static_cast<int64_t>(filterX) - filterGridOffset + x;
+                const int64_t volumePositionY =
+                    static_cast<int64_t>(filterY) - filterGridOffset + y;
+                const int64_t volumePositionZ =
+                    static_cast<int64_t>(filterZ) - filterGridOffset + z;
 
                 // check if current filter position is a valid volume position
                 const bool outsideBorderX =
@@ -95,12 +99,16 @@ const uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, cons
                 if (outsideBorderX || outsideBorderY || outsideBorderZ) {
                     // Pixels outside the volume borders must be extrapolated
                     filterGridValues[filterX][filterY][filterZ] =
-                        static_cast<double>(volume->getVoxelValue(x, y, z)) *
+                        static_cast<double>(volume->getVoxelValue(static_cast<std::size_t>(x),
+                                                                  static_cast<std::size_t>(y),
+                                                                  static_cast<std::size_t>(z))) *
                         filter.getFilterGrid()[filterX][filterY][filterZ];
                 } else {
                     filterGridValues[filterX][filterY][filterZ] =
-                        static_cast<double>(volume->getVoxelValue(volumePositionX, volumePositionY,
-                                                                  volumePositionZ)) *
+                        static_cast<double>(
+                            volume->getVoxelValue(static_cast<std::size_t>(volumePositionX),
+                                                  static_cast<std::size_t>(volumePositionY),
+                                                  static_cast<std::size_t>(volumePositionZ))) *
                         filter.getFilterGrid()[filterX][filterY][filterZ];
                 }
             }

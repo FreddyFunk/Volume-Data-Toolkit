@@ -8,9 +8,9 @@ public:
     ~EndianConverter();
 
     static const void flipEndianness(VolumeData* const volume) {
-        for (uint32_t x = 0; x < volume->getSize().getX(); x++) {
-            for (uint32_t y = 0; y < volume->getSize().getY(); y++) {
-                for (uint32_t z = 0; z < volume->getSize().getZ(); z++) {
+        for (std::size_t x = 0; x < volume->getSize().getX(); x++) {
+            for (std::size_t y = 0; y < volume->getSize().getY(); y++) {
+                for (std::size_t z = 0; z < volume->getSize().getZ(); z++) {
                     const uint16_t originalValue = volume->getVoxelValue(x, y, z);
                     const uint16_t convertedValue =
                         (originalValue & 0xff) << 8 | (originalValue & 0xff00) >> 8;

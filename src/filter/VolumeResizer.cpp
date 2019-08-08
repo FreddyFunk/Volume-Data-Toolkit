@@ -56,15 +56,18 @@ const void VolumeResizer::scaleSliceX(const VolumeData* const volume, VolumeData
 
 const void VolumeResizer::scaleVolume(VolumeData* const volume, const VDTK::Vector3D<float>& scale,
                                       const InterpolationMode interpolationMode,
-                                      const uint32_t numberOfThreads) {
+                                      const std::size_t numberOfThreads) {
     const float originalSizeX = static_cast<float>(volume->getSize().getX());
     const float originalSizeY = static_cast<float>(volume->getSize().getY());
     const float originalSizeZ = static_cast<float>(volume->getSize().getZ());
     const VDTK::Vector3D<float> originalSize(originalSizeX, originalSizeY, originalSizeZ);
 
-    const uint32_t scaledSizeX = static_cast<uint32_t>(std::round(originalSizeX * scale.getX()));
-    const uint32_t scaledSizeY = static_cast<uint32_t>(std::round(originalSizeY * scale.getY()));
-    const uint32_t scaledSizeZ = static_cast<uint32_t>(std::round(originalSizeZ * scale.getZ()));
+    const std::size_t scaledSizeX =
+        static_cast<std::size_t>(std::round(originalSizeX * scale.getX()));
+    const std::size_t scaledSizeY =
+        static_cast<std::size_t>(std::round(originalSizeY * scale.getY()));
+    const std::size_t scaledSizeZ =
+        static_cast<std::size_t>(std::round(originalSizeZ * scale.getZ()));
     const VDTK::VolumeSize scaledSize(scaledSizeX, scaledSizeY, scaledSizeZ);
 
     const float scaledSpacingX = volume->getSpacing().getX() / scale.getX();
@@ -92,19 +95,19 @@ const void VolumeResizer::scaleVolume(VolumeData* const volume, const VDTK::Vect
 
 const void VolumeResizer::scaleNearestNeighbor(VolumeData* const volume,
                                                const VDTK::Vector3D<float>& scale,
-                                               const uint32_t numberOfThreads) {
+                                               const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Nearest, numberOfThreads);
 }
 
 const void VolumeResizer::scaleTrilinear(VolumeData* const volume,
                                          const VDTK::Vector3D<float>& scale,
-                                         const uint32_t numberOfThreads) {
+                                         const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Trilinear, numberOfThreads);
 }
 
 const void VolumeResizer::scaleTricubic(VolumeData* const volume,
                                         const VDTK::Vector3D<float>& scale,
-                                        const uint32_t numberOfThreads) {
+                                        const std::size_t numberOfThreads) {
     scaleVolume(volume, scale, InterpolationMode::Tricubic, numberOfThreads);
 }
 

@@ -16,7 +16,7 @@ bool RawReader::read(VolumeData* const volumeData, const std::filesystem::path& 
     }
 
     std::ifstream file(filePath, std::ios::binary | std::ios::ate);
-    size_t fileSize = 0;
+    std::size_t fileSize = 0;
 
     try {
         fileSize = std::filesystem::file_size(filePath);

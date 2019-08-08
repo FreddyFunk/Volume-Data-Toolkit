@@ -19,8 +19,8 @@ const bool BinarySliceImporter::import(VolumeData* const volumeData,
 
     VolumeData volume(size, spacing);
 
-    uint32_t sliceWidth = 0;
-    uint32_t sliceHeight = 0;
+    std::size_t sliceWidth = 0;
+    std::size_t sliceHeight = 0;
 
     switch (axis) {
     case VolumeAxis::XZAxis: {
@@ -41,7 +41,7 @@ const bool BinarySliceImporter::import(VolumeData* const volumeData,
     }
     }
 
-    uint32_t sliceIndex = 0;
+    std::size_t sliceIndex = 0;
     for (const auto& directoryEntry : std::filesystem::directory_iterator(directoryPath)) {
         // skip subdirectories
         if (std::filesystem::is_regular_file(directoryEntry)) {
@@ -62,8 +62,8 @@ const bool BinarySliceImporter::import(VolumeData* const volumeData,
 const bool BinarySliceImporter::loadSlice(VolumeSlice* const volumeSlice,
                                           const std::filesystem::path& filePath,
                                           const uint8_t bitsPerVoxel, const VolumeAxis axis,
-                                          const uint32_t width, const uint32_t height) {
-    size_t fileSize = 0;
+                                          const std::size_t width, const std::size_t height) {
+    std::size_t fileSize = 0;
     try {
         fileSize = std::filesystem::file_size(filePath);
     } catch (std::filesystem::filesystem_error& e) {

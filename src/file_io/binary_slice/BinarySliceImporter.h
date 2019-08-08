@@ -16,7 +16,8 @@ public:
 private:
     static const bool loadSlice(VolumeSlice* const volumeSlice,
                                 const std::filesystem::path& filePath, const uint8_t bitsPerVoxel,
-                                const VolumeAxis axis, const uint32_t width, const uint32_t height);
+                                const VolumeAxis axis, const std::size_t width,
+                                const std::size_t height);
     static const std::vector<uint16_t> convertTo16Bit(std::vector<char>* buffer,
                                                       const uint8_t bitsPerPixel,
                                                       const uint64_t pixelCount);

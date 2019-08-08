@@ -75,7 +75,7 @@ const void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath,
     }
     }
 
-    uint32_t numberOfSlices = 0;
+    std::size_t numberOfSlices = 0;
     switch (axis) {
     case VolumeAxis::YZAxis: {
         numberOfSlices = volume.getSize().getX();
@@ -93,7 +93,7 @@ const void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath,
     }
 
     // proccess each slice of the current axis
-    for (uint32_t sliceIndex = 0; sliceIndex < numberOfSlices; sliceIndex++) {
+    for (std::size_t sliceIndex = 0; sliceIndex < numberOfSlices; sliceIndex++) {
         writeAxisAtIndex(convertToPixel, directoryPath, volume, axis, sliceIndex);
     }
 }
@@ -101,7 +101,7 @@ const void BitmapExporter::writeAxis(const std::filesystem::path& directoryPath,
 const void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToPixel)(uint16_t),
                                             const std::filesystem::path& directoryPath,
                                             const VolumeData& volume, VolumeAxis axis,
-                                            const uint32_t sliceIndex) {
+                                            const std::size_t sliceIndex) {
     std::string fileName = {};
 
     // TODO: move to own function
@@ -123,11 +123,11 @@ const void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToP
 
     VolumeSlice slice = volume.getSlice(axis, sliceIndex);
 
-    bitmap_image image(slice.getWidth(), slice.getHeigth());
+    bitmap_image image(static_cast<int>(slice.getWidth()), static_cast<int>(slice.getHeigth()));
 
     // convert the slice into an bitmap with selected pixel representation
-    for (uint32_t x = 0; x < slice.getWidth(); x++) {
-        for (uint32_t y = 0; y < slice.getHeigth(); y++) {
+    for (std::size_t x = 0; x < slice.getWidth(); x++) {
+        for (std::size_t y = 0; y < slice.getHeigth(); y++) {
             // parse 24 bit ISO value into an RGB 555 pixel
             const std::vector<char> rawPixelData = convertToPixel(slice.getPixel(x, y));
             rgb_t pixel;
@@ -135,7 +135,7 @@ const void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToP
             pixel.green = rawPixelData[1];
             pixel.blue = rawPixelData[2];
 
-            image.set_pixel(x, y, pixel);
+            image.set_pixel(static_cast<unsigned int>(x), static_cast<unsigned int>(y), pixel);
         }
     }
 
@@ -148,8 +148,9 @@ const void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToP
     std::filesystem::path imageFilePath = directoryPath;
     // if path is a directory path, generic file name gets generated
     if (!imageFilePath.has_filename()) {
-        const uint32_t numberOfNeededZeros = VDTK::FileIOCommon::numberOfDigits(slice.getWidth()) -
-                                             VDTK::FileIOCommon::numberOfDigits(sliceIndex);
+        const std::size_t numberOfNeededZeros =
+            VDTK::FileIOCommon::numberOfDigits(slice.getWidth()) -
+            VDTK::FileIOCommon::numberOfDigits(sliceIndex);
 
         fileName.append(std::string(numberOfNeededZeros, '0'));
         fileName.append(std::to_string(sliceIndex));

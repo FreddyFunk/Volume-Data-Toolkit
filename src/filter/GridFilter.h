@@ -8,16 +8,16 @@ public:
     ~GridFilter();
 
     static void applyFilter(VolumeData* const volume, const VDTK::FilterKernel& filter,
-                            const uint32_t numberOfThreads);
+                            const std::size_t numberOfThreads);
 
 private:
     static void applyFilterToSliceX(const VolumeData* const volume,
                                     VolumeData* const filteredVolume,
-                                    const VDTK::FilterKernel& filter, const uint32_t positionX);
+                                    const VDTK::FilterKernel& filter, const std::size_t positionX);
     static const uint16_t filterGridAverage(
         const std::vector<std::vector<std::vector<double>>>& filterGridValues);
-    static const uint16_t getNewVoxelValue(const VolumeData* const volume, const uint32_t x,
-                                           const uint32_t y, const uint32_t z,
+    static const uint16_t getNewVoxelValue(const VolumeData* const volume, const std::size_t x,
+                                           const std::size_t y, const std::size_t z,
                                            const VDTK::FilterKernel& filter);
 };
 } // namespace VDTK
