@@ -59,9 +59,8 @@ const std::vector<uint16_t> RawReader::convertTo16Bit(std::vector<char>& data,
 
     switch (bitsPerVoxel) {
     case 8: {
-        std::transform(
-            data.begin(), data.end(), convertedData.begin(),
-            [](char in) -> const uint16_t { return static_cast<uint16_t>(in) * UINT8_MAX; });
+        std::transform(data.begin(), data.end(), convertedData.begin(),
+                       [](char in) -> uint16_t { return static_cast<uint16_t>(in) * UINT8_MAX; });
         break;
     }
     case 16: {

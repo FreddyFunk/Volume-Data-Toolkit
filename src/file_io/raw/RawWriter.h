@@ -7,8 +7,8 @@ public:
     RawWriter();
     ~RawWriter();
 
-    static const bool write(const std::filesystem::path& filePath, const uint8_t bitsPerVoxel,
-                            const VolumeData& volume);
+    static bool write(const std::filesystem::path& filePath, const uint8_t bitsPerVoxel,
+                      const VolumeData& volume);
 
 private:
     static const std::vector<uint8_t> convertTo8Bit(const std::vector<uint16_t>& data,

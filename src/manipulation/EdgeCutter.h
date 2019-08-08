@@ -7,7 +7,7 @@ public:
     EdgeCutter();
     ~EdgeCutter();
 
-    static const void cutBorders(VolumeData* const volume, const uint16_t threshold = 0);
+    static void cutBorders(VolumeData* const volume, const uint16_t threshold = 0);
 
 private:
 };

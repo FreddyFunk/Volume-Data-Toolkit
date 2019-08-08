@@ -7,7 +7,7 @@ public:
     EndianConverter();
     ~EndianConverter();
 
-    static const void flipEndianness(VolumeData* const volume) {
+    static void flipEndianness(VolumeData* const volume) {
         for (std::size_t x = 0; x < volume->getSize().getX(); x++) {
             for (std::size_t y = 0; y < volume->getSize().getY(); y++) {
                 for (std::size_t z = 0; z < volume->getSize().getZ(); z++) {

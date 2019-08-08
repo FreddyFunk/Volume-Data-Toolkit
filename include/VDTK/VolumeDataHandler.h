@@ -29,7 +29,7 @@ public:
     bool exportToBitmapMonochrom(const std::filesystem::path& directoryPath) const;
 
     // gets the raw voxel value from the curren volume on a given position
-    const uint16_t getRawValue(const std::size_t x, const std::size_t y, const std::size_t z) const;
+    uint16_t getRawValue(const std::size_t x, const std::size_t y, const std::size_t z) const;
     const VolumeData getVolumeData() const;
 
     void applyWindow(const int32_t windowLevel, const int32_t windowWidth,
@@ -42,7 +42,7 @@ public:
     // threshold between 0 and UINT16_MAX
     void cutBorders(const uint16_t thresholdISO);
 
-    const void invertVoxelData();
+    void invertVoxelData();
 
     // scales volume to the choosen size
     void scaleToSize(const ScaleMode scaleMode, const VolumeSize& size);
@@ -62,7 +62,7 @@ public:
 
     void convertEndianness();
 
-    static const void printLegalNotice();
+    static void printLegalNotice();
 
 private:
     // voxel data is stored here

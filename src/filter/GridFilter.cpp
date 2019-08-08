@@ -40,7 +40,7 @@ void GridFilter::applyFilterToSliceX(const VolumeData* const volume,
     }
 }
 
-const uint16_t GridFilter::filterGridAverage(
+uint16_t GridFilter::filterGridAverage(
     const std::vector<std::vector<std::vector<double>>>& filterGridValues) {
     double average = 0;
 
@@ -61,9 +61,9 @@ const uint16_t GridFilter::filterGridAverage(
     }
 }
 
-const uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, const std::size_t x,
-                                            const std::size_t y, const std::size_t z,
-                                            const VDTK::FilterKernel& filter) {
+uint16_t GridFilter::getNewVoxelValue(const VolumeData* const volume, const std::size_t x,
+                                      const std::size_t y, const std::size_t z,
+                                      const VDTK::FilterKernel& filter) {
     // stores values of filter grid when applied to volume data
     std::vector<std::vector<std::vector<double>>> filterGridValues(
         filter.getKernelSize(),

@@ -30,13 +30,13 @@ public:
         m_X = m_Y = m_Z = x;
     }
 
-    const T getX() const {
+    T getX() const {
         return m_X;
     }
-    const T getY() const {
+    T getY() const {
         return m_Y;
     }
-    const T getZ() const {
+    T getZ() const {
         return m_Z;
     }
 
@@ -140,11 +140,11 @@ public:
 
         return *this;
     }
-    const bool operator==(const Vector3D& rhs) const {
+    bool operator==(const Vector3D& rhs) const {
 
         return this->m_X == rhs.m_X && this->m_Y == rhs.m_Y && this->m_Z == rhs.m_Z;
     }
-    const bool operator!=(const Vector3D& rhs) const {
+    bool operator!=(const Vector3D& rhs) const {
 
         return this->m_X != rhs.m_X || this->m_Y != rhs.m_Y || this->m_Z != rhs.m_Z;
     }
@@ -169,17 +169,17 @@ public:
                 const std::size_t width, const std::size_t height)
         : m_axis(axis), m_width(width), m_height(height), m_pixelData(pixelData) {}
 
-    const std::size_t getWidth() const {
+    std::size_t getWidth() const {
         return m_width;
     }
-    const std::size_t getHeigth() const {
+    std::size_t getHeigth() const {
         return m_height;
     }
-    const VolumeAxis getAxis() const {
+    VolumeAxis getAxis() const {
         return m_axis;
     }
 
-    const uint16_t getPixel(const std::size_t x, const std::size_t y) const {
+    uint16_t getPixel(const std::size_t x, const std::size_t y) const {
         // check if position is within slice size
         assert(x < getWidth() && y < getHeigth());
         return m_pixelData[y + (m_height * x)];
@@ -226,7 +226,7 @@ public:
     const VDTK::VolumeSpacing getSpacing() const {
         return m_Spacing;
     }
-    const uint64_t getVoxelCount() const {
+    uint64_t getVoxelCount() const {
         return m_VoxelCount;
     }
 
@@ -248,19 +248,18 @@ public:
         setVoxelValue(static_cast<std::size_t>(x), static_cast<std::size_t>(y),
                       static_cast<std::size_t>(z), static_cast<uint16_t>(value));
     }
-    const uint16_t getVoxelValue(const std::size_t x, const std::size_t y,
-                                 const std::size_t z) const {
+    uint16_t getVoxelValue(const std::size_t x, const std::size_t y, const std::size_t z) const {
         assert(x < m_Size.getX() && y < m_Size.getY() && z < m_Size.getZ());
 
         // data is stored in zyx order
         return m_Data[x + m_Size.getX() * (y + (m_Size.getY() * z))];
     }
-    const float getVoxelValue(const float x, const float y, const float z) const {
+    float getVoxelValue(const float x, const float y, const float z) const {
         assert(x >= 0.0f && y >= 0.0f && z >= 0.0f);
         return static_cast<float>(getVoxelValue(
             static_cast<std::size_t>(x), static_cast<std::size_t>(y), static_cast<std::size_t>(z)));
     }
-    const double getVoxelValue(const double x, const double y, const double z) const {
+    double getVoxelValue(const double x, const double y, const double z) const {
         assert(x >= 0.0 && y >= 0.0 && z >= 0.0);
         return static_cast<double>(getVoxelValue(
             static_cast<std::size_t>(x), static_cast<std::size_t>(y), static_cast<std::size_t>(z)));
@@ -448,7 +447,7 @@ public:
         return filterGrid;
     }
 
-    const std::size_t getKernelSize() const {
+    std::size_t getKernelSize() const {
         return kernelSize;
     }
 

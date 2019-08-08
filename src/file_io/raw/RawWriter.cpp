@@ -19,8 +19,8 @@ const std::vector<uint8_t> RawWriter::convertTo8Bit(const std::vector<uint16_t>&
     return convertedData;
 }
 
-const bool RawWriter::write(const std::filesystem::path& filePath, const uint8_t bitsPerVoxel,
-                            const VolumeData& volume) {
+bool RawWriter::write(const std::filesystem::path& filePath, const uint8_t bitsPerVoxel,
+                      const VolumeData& volume) {
     std::ofstream file = std::ofstream(filePath, std::ios::out | std::ios::binary);
 
     if (file.fail()) {

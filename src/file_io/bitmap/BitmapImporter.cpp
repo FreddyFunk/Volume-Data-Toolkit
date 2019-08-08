@@ -21,20 +21,19 @@ BitmapImporter::BitmapImporter() {}
 
 BitmapImporter::~BitmapImporter() {}
 
-const bool BitmapImporter::importMonochrom(VolumeData* const volumeData,
-                                           const std::filesystem::path& directoryPath,
-                                           const VolumeAxis axis,
-                                           const VDTK::VolumeSpacing spacing) {
+bool BitmapImporter::importMonochrom(VolumeData* const volumeData,
+                                     const std::filesystem::path& directoryPath,
+                                     const VolumeAxis axis, const VDTK::VolumeSpacing spacing) {
     return import(volumeData, directoryPath, axis, spacing, PixelMode::RGBMonochrom);
 }
 
-const bool BitmapImporter::importColor(VolumeData* const volumeData,
-                                       const std::filesystem::path& directoryPath,
-                                       const VolumeAxis axis, const VDTK::VolumeSpacing spacing) {
+bool BitmapImporter::importColor(VolumeData* const volumeData,
+                                 const std::filesystem::path& directoryPath, const VolumeAxis axis,
+                                 const VDTK::VolumeSpacing spacing) {
     return import(volumeData, directoryPath, axis, spacing, PixelMode::RGBColor);
 }
 
-inline const uint16_t BitmapImporter::pixelRGBColorToVoxel(const std::vector<char> pixel) {
+inline uint16_t BitmapImporter::pixelRGBColorToVoxel(const std::vector<char> pixel) {
     // convert pixel to unsigned int (technically 32 bit, but interpreted as 24
     // bit)
     std::vector<char> rawPixel24Bit(4);
@@ -52,7 +51,7 @@ inline const uint16_t BitmapImporter::pixelRGBColorToVoxel(const std::vector<cha
     return static_cast<uint16_t>(pixel24Bit);
 }
 
-inline const uint16_t BitmapImporter::pixelRGBMonochromToVoxel(const std::vector<char> pixel) {
+inline uint16_t BitmapImporter::pixelRGBMonochromToVoxel(const std::vector<char> pixel) {
     // calculate averange of 3 8-bit channels (RGB)
     uint32_t rawPixel = 0;
     rawPixel += static_cast<uint32_t>(pixel[0]);
@@ -66,7 +65,7 @@ inline const uint16_t BitmapImporter::pixelRGBMonochromToVoxel(const std::vector
     return static_cast<uint16_t>(rawPixel);
 }
 
-const std::size_t BitmapImporter::getNumberOfBitmapsInDirectory(
+std::size_t BitmapImporter::getNumberOfBitmapsInDirectory(
     const std::filesystem::path& directoryPath) {
     std::size_t numberOfBitmaps = 0;
     for (const auto& directoryEntry : std::filesystem::directory_iterator(directoryPath)) {
@@ -133,9 +132,9 @@ const VDTK::VolumeSize BitmapImporter::calculateVolumeSize(
 }
 
 // TODO: needs some refactoring
-const bool BitmapImporter::import(VolumeData* const volumeData,
-                                  const std::filesystem::path& directoryPath, const VolumeAxis axis,
-                                  const VDTK::VolumeSpacing spacing, const PixelMode pixelMode) {
+bool BitmapImporter::import(VolumeData* const volumeData,
+                            const std::filesystem::path& directoryPath, const VolumeAxis axis,
+                            const VDTK::VolumeSpacing spacing, const PixelMode pixelMode) {
     if (!std::filesystem::exists(directoryPath)) {
         // Directory does not exist
         return false;

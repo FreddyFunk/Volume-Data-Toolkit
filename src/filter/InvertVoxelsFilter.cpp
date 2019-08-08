@@ -7,7 +7,7 @@ InvertVoxelFilter::InvertVoxelFilter() {}
 
 InvertVoxelFilter::~InvertVoxelFilter() {}
 
-const void InvertVoxelFilter::invertVoxelData(VolumeData& volume) {
+void InvertVoxelFilter::invertVoxelData(VolumeData& volume) {
     for (std::size_t x = 0; x < volume.getSize().getX(); x++) {
         for (std::size_t y = 0; y < volume.getSize().getY(); y++) {
             for (std::size_t z = 0; z < volume.getSize().getZ(); z++) {

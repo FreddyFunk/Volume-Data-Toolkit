@@ -8,9 +8,9 @@ WindowFilter::WindowFilter() {}
 
 WindowFilter::~WindowFilter() {}
 
-const void WindowFilter::applyWindow(VolumeData* const volume, const int32_t windowCenter,
-                                     const int32_t windowWidth, const int32_t windowOffset,
-                                     const std::size_t numberOfThreads) {
+void WindowFilter::applyWindow(VolumeData* const volume, const int32_t windowCenter,
+                               const int32_t windowWidth, const int32_t windowOffset,
+                               const std::size_t numberOfThreads) {
     {
         // create own scope to use destructor of thread pool (wait for all task to
         // finish)
@@ -25,9 +25,9 @@ const void WindowFilter::applyWindow(VolumeData* const volume, const int32_t win
     }
 }
 
-const void WindowFilter::applyWindowSliceX(VolumeData* const volume, const int32_t windowCenter,
-                                           const int32_t windowWidth, const int32_t windowOffset,
-                                           const std::size_t positionX) {
+void WindowFilter::applyWindowSliceX(VolumeData* const volume, const int32_t windowCenter,
+                                     const int32_t windowWidth, const int32_t windowOffset,
+                                     const std::size_t positionX) {
     double level = windowCenter;
     double width = windowWidth;
     double offset = windowOffset;

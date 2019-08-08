@@ -9,7 +9,7 @@
 namespace VDTK::FileIOCommon {
 // needed generating file names (bitmap or dicom for example)
 // could be more optimized with a look up table
-static const std::size_t numberOfDigits(std::size_t number) {
+static std::size_t numberOfDigits(std::size_t number) {
     std::size_t digits = 0;
     if (!number) {
         digits++; // to write a zero one digit is still needed
@@ -22,7 +22,7 @@ static const std::size_t numberOfDigits(std::size_t number) {
 }
 
 // checks if a character in a string is a digit
-static const bool isADigit(const std::string& s, const std::size_t index) {
+static bool isADigit(const std::string& s, const std::size_t index) {
     if (index >= s.size()) {
         return false;
     }
@@ -33,9 +33,9 @@ static const bool isADigit(const std::string& s, const std::size_t index) {
     return false;
 }
 
-static const void renameIndexedFilesInDirectory(const std::filesystem::path& directoryPath,
-                                                const std::string& sliceName = "_IMG",
-                                                const std::string& fileExtension = {}) {
+static void renameIndexedFilesInDirectory(const std::filesystem::path& directoryPath,
+                                          const std::string& sliceName = "_IMG",
+                                          const std::string& fileExtension = {}) {
     std::vector<std::filesystem::path> filePaths;
     // get all file names in directory
     for (const auto& directoryEntry : std::filesystem::directory_iterator(directoryPath)) {
