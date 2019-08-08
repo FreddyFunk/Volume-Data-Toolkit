@@ -155,36 +155,36 @@ private:
     T m_Z = T();
 };
 
-typedef Vector3D<uint32_t> VolumeSize;
+typedef Vector3D<std::size_t> VolumeSize;
 typedef Vector3D<float> VolumeSpacing;
 
 class VolumeSlice {
 public:
-    VolumeSlice(const VolumeAxis axis, const uint32_t width, const uint32_t height) {
+    VolumeSlice(const VolumeAxis axis, const std::size_t width, const std::size_t height) {
         m_axis = axis;
         m_pixelData = std::vector<uint16_t>(width * height);
     }
 
-    VolumeSlice(const VolumeAxis axis, const std::vector<uint16_t>& pixelData, const uint32_t width,
-                const uint32_t height)
+    VolumeSlice(const VolumeAxis axis, const std::vector<uint16_t>& pixelData,
+                const std::size_t width, const std::size_t height)
         : m_axis(axis), m_width(width), m_height(height), m_pixelData(pixelData) {}
 
-    const uint32_t getWidth() const {
+    const std::size_t getWidth() const {
         return m_width;
     }
-    const uint32_t getHeigth() const {
+    const std::size_t getHeigth() const {
         return m_height;
     }
     const VolumeAxis getAxis() const {
         return m_axis;
     }
 
-    const uint16_t getPixel(const uint32_t x, const uint32_t y) const {
+    const uint16_t getPixel(const std::size_t x, const std::size_t y) const {
         // check if position is within slice size
         assert(x < getWidth() && y < getHeigth());
         return m_pixelData[y + (m_height * x)];
     }
-    void setPixel(const uint32_t x, const uint32_t y, const uint16_t value) {
+    void setPixel(const std::size_t x, const std::size_t y, const uint16_t value) {
         // check if position is within slice size
         assert(x < getWidth() && y < getHeigth());
         m_pixelData[y + (m_height * x)] = value;
@@ -204,8 +204,8 @@ public:
 
 private:
     VolumeAxis m_axis = VolumeAxis::YZAxis;
-    uint32_t m_width = 0;
-    uint32_t m_height = 0;
+    std::size_t m_width = 0;
+    std::size_t m_height = 0;
     std::vector<uint16_t> m_pixelData = std::vector<uint16_t>(0);
 };
 
@@ -231,51 +231,44 @@ public:
     }
 
     // Individual voxel access
-    void setVoxelValue(const uint32_t x, const uint32_t y, const uint32_t z, const uint16_t value) {
+    void setVoxelValue(const std::size_t x, const std::size_t y, const std::size_t z,
+                       const uint16_t value) {
         assert(x < m_Size.getX() && y < m_Size.getY() && z < m_Size.getZ());
 
         // data is stored in zyx order
         m_Data[x + m_Size.getX() * (y + (m_Size.getY() * z))] = value;
     }
-    void setVoxelValue(const int32_t x, const int32_t y, const int32_t z, const uint16_t value) {
-        setVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y), static_cast<uint32_t>(z),
-                      static_cast<uint16_t>(value));
-    }
     void setVoxelValue(const float x, const float y, const float z, const float value) {
         assert(value <= static_cast<float>(UINT16_MAX) && value >= 0.0f);
-        setVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y), static_cast<uint32_t>(z),
-                      static_cast<uint16_t>(value));
+        setVoxelValue(static_cast<std::size_t>(x), static_cast<std::size_t>(y),
+                      static_cast<std::size_t>(z), static_cast<uint16_t>(value));
     }
     void setVoxelValue(const double x, const double y, const double z, const double value) {
         assert(value <= static_cast<double>(UINT16_MAX) && value >= 0.0);
-        setVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y), static_cast<uint32_t>(z),
-                      static_cast<uint16_t>(value));
+        setVoxelValue(static_cast<std::size_t>(x), static_cast<std::size_t>(y),
+                      static_cast<std::size_t>(z), static_cast<uint16_t>(value));
     }
-    const uint16_t getVoxelValue(const uint32_t x, const uint32_t y, const uint32_t z) const {
+    const uint16_t getVoxelValue(const std::size_t x, const std::size_t y,
+                                 const std::size_t z) const {
         assert(x < m_Size.getX() && y < m_Size.getY() && z < m_Size.getZ());
 
         // data is stored in zyx order
         return m_Data[x + m_Size.getX() * (y + (m_Size.getY() * z))];
     }
-    const uint16_t getVoxelValue(const int32_t x, const int32_t y, const int32_t z) const {
-        assert(x >= 0 && y >= 0 && z >= 0);
-        return getVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y),
-                             static_cast<uint32_t>(z));
-    }
     const float getVoxelValue(const float x, const float y, const float z) const {
         assert(x >= 0.0f && y >= 0.0f && z >= 0.0f);
-        return static_cast<float>(getVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y),
-                                                static_cast<uint32_t>(z)));
+        return static_cast<float>(getVoxelValue(
+            static_cast<std::size_t>(x), static_cast<std::size_t>(y), static_cast<std::size_t>(z)));
     }
     const double getVoxelValue(const double x, const double y, const double z) const {
         assert(x >= 0.0 && y >= 0.0 && z >= 0.0);
-        return static_cast<double>(getVoxelValue(static_cast<uint32_t>(x), static_cast<uint32_t>(y),
-                                                 static_cast<uint32_t>(z)));
+        return static_cast<double>(getVoxelValue(
+            static_cast<std::size_t>(x), static_cast<std::size_t>(y), static_cast<std::size_t>(z)));
         ;
     }
 
     // Axis providen by slice argument
-    void setSlice(const VolumeSlice& slice, const uint32_t sliceIndex) {
+    void setSlice(const VolumeSlice& slice, const std::size_t sliceIndex) {
         switch (slice.getAxis()) {
         case VolumeAxis::YZAxis: {
             setSliceYZ(slice, sliceIndex);
@@ -292,7 +285,7 @@ public:
         default: { break; }
         }
     }
-    const VolumeSlice getSlice(const VolumeAxis axis, const uint32_t sliceIndex) const {
+    const VolumeSlice getSlice(const VolumeAxis axis, const std::size_t sliceIndex) const {
         switch (axis) {
         case VolumeAxis::YZAxis: {
             return getSliceYZ(sliceIndex);
@@ -346,24 +339,24 @@ private:
 
     // Individual slice access (starts counting at 0)
     // YZ Axis
-    void setSliceYZ(const VolumeSlice& slice, const uint32_t x) {
+    void setSliceYZ(const VolumeSlice& slice, const std::size_t x) {
         // check if slice size fits
         assert(slice.getWidth() == m_Size.getY() && slice.getHeigth() == m_Size.getZ());
 
-        for (uint32_t y = 0; y < m_Size.getY(); y++) {
-            for (uint32_t z = 0; z < m_Size.getZ(); z++) {
+        for (std::size_t y = 0; y < m_Size.getY(); y++) {
+            for (std::size_t z = 0; z < m_Size.getZ(); z++) {
                 setVoxelValue(x, y, z, slice.getPixel(y, z));
             }
         }
     }
-    const VolumeSlice getSliceYZ(const uint32_t x) const {
+    const VolumeSlice getSliceYZ(const std::size_t x) const {
         // check if requested slice is a valid slice index
         assert(x < m_Size.getX());
 
         VolumeSlice slice(VolumeAxis::YZAxis, m_Size.getY(), m_Size.getZ());
 
-        for (uint32_t y = 0; y < m_Size.getY(); y++) {
-            for (uint32_t z = 0; z < m_Size.getZ(); z++) {
+        for (std::size_t y = 0; y < m_Size.getY(); y++) {
+            for (std::size_t z = 0; z < m_Size.getZ(); z++) {
                 slice.setPixel(y, z, getVoxelValue(x, y, z));
             }
         }
@@ -371,24 +364,24 @@ private:
         return slice;
     }
     // XZ Axis
-    void setSliceXZ(const VolumeSlice& slice, const uint32_t y) {
+    void setSliceXZ(const VolumeSlice& slice, const std::size_t y) {
         // check if slice size fits
         assert(slice.getWidth() == m_Size.getX() && slice.getHeigth() == m_Size.getZ());
 
-        for (uint32_t x = 0; x < m_Size.getX(); x++) {
-            for (uint32_t z = 0; z < m_Size.getZ(); z++) {
+        for (std::size_t x = 0; x < m_Size.getX(); x++) {
+            for (std::size_t z = 0; z < m_Size.getZ(); z++) {
                 setVoxelValue(x, y, z, slice.getPixel(x, z));
             }
         }
     }
-    const VolumeSlice getSliceXZ(const uint32_t y) const {
+    const VolumeSlice getSliceXZ(const std::size_t y) const {
         // check if requested slice is a valid slice index
         assert(y < m_Size.getY());
 
         VolumeSlice slice(VolumeAxis::XZAxis, m_Size.getX(), m_Size.getZ());
 
-        for (uint32_t x = 0; x < m_Size.getX(); x++) {
-            for (uint32_t z = 0; z < m_Size.getZ(); z++) {
+        for (std::size_t x = 0; x < m_Size.getX(); x++) {
+            for (std::size_t z = 0; z < m_Size.getZ(); z++) {
                 slice.setPixel(x, z, getVoxelValue(x, y, z));
             }
         }
@@ -396,24 +389,24 @@ private:
         return slice;
     }
     // XY Axis
-    void setSliceXY(const VolumeSlice& slice, const uint32_t z) {
+    void setSliceXY(const VolumeSlice& slice, const std::size_t z) {
         // check if slice size fits
         assert(slice.getWidth() == m_Size.getX() && slice.getHeigth() == m_Size.getY());
 
-        for (uint32_t x = 0; x < m_Size.getX(); x++) {
-            for (uint32_t y = 0; y < m_Size.getY(); y++) {
+        for (std::size_t x = 0; x < m_Size.getX(); x++) {
+            for (std::size_t y = 0; y < m_Size.getY(); y++) {
                 setVoxelValue(x, y, z, slice.getPixel(x, y));
             }
         }
     }
-    const VolumeSlice getSliceXY(const uint32_t z) const {
+    const VolumeSlice getSliceXY(const std::size_t z) const {
         // check if requested slice is a valid slice index
         assert(z < m_Size.getZ());
 
         VolumeSlice slice(VolumeAxis::XYAxis, m_Size.getX(), m_Size.getY());
 
-        for (uint32_t x = 0; x < m_Size.getX(); x++) {
-            for (uint32_t y = 0; y < m_Size.getY(); y++) {
+        for (std::size_t x = 0; x < m_Size.getX(); x++) {
+            for (std::size_t y = 0; y < m_Size.getY(); y++) {
                 slice.setPixel(x, y, getVoxelValue(x, y, z));
             }
         }
@@ -455,12 +448,12 @@ public:
         return filterGrid;
     }
 
-    const uint8_t getKernelSize() const {
+    const std::size_t getKernelSize() const {
         return kernelSize;
     }
 
 private:
-    uint8_t kernelSize = 3;
+    std::size_t kernelSize = 3;
     std::vector<std::vector<std::vector<double>>> filterGrid;
 };
 

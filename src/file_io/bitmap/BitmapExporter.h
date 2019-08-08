@@ -24,6 +24,6 @@ private:
     static const void writeAxisAtIndex(const std::vector<char> (*convertToPixel)(uint16_t),
                                        const std::filesystem::path& directoryPath,
                                        const VolumeData& volume, VolumeAxis axis,
-                                       const uint32_t sliceIndex);
+                                       const std::size_t sliceIndex);
 };
 } // namespace VDTK

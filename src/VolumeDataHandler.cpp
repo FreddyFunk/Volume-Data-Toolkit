@@ -18,7 +18,7 @@
 
 namespace VDTK {
 
-VolumeDataHandler::VolumeDataHandler(const uint32_t numberOfUsableThreads)
+VolumeDataHandler::VolumeDataHandler(const std::size_t numberOfUsableThreads)
     : m_numberOfThreads((numberOfUsableThreads > 0) ? numberOfUsableThreads : 1) {}
 
 VolumeDataHandler::~VolumeDataHandler() {}
@@ -61,8 +61,8 @@ bool VolumeDataHandler::exportToBitmapMonochrom(const std::filesystem::path& dir
     return BitmapExporter::writeMonochrom(directoryPath, m_VolumeData);
 }
 
-const uint16_t VolumeDataHandler::getRawValue(const uint32_t x, const uint32_t y,
-                                              const uint32_t z) const {
+const uint16_t VolumeDataHandler::getRawValue(const std::size_t x, const std::size_t y,
+                                              const std::size_t z) const {
     return m_VolumeData.getVoxelValue(x, y, z);
 }
 
