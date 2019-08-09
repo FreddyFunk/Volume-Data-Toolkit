@@ -27,10 +27,8 @@ static bool isADigit(const std::string& s, const std::size_t index) {
         return false;
     }
     const std::size_t number = static_cast<std::size_t>(s.at(index)) - 48;
-    if (number >= 0 && number <= 9) {
-        return true;
-    }
-    return false;
+
+    return number <= 9;
 }
 
 static void renameIndexedFilesInDirectory(const std::filesystem::path& directoryPath,
