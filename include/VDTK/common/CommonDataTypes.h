@@ -50,18 +50,6 @@ public:
         m_Z = z;
     }
 
-    // overload operators
-    Vector3D& operator=(const Vector3D& rhs) {
-
-        // Only do assignment if RHS is a different object from this.
-        if (this != &rhs) {
-            this->m_X = rhs.m_X;
-            this->m_Y = rhs.m_Y;
-            this->m_Z = rhs.m_Z;
-        }
-
-        return *this;
-    }
     Vector3D& operator+(const Vector3D& rhs) {
 
         this->m_X += rhs.m_X;
@@ -189,19 +177,7 @@ public:
         assert(x < getWidth() && y < getHeigth());
         m_pixelData[y + (m_height * x)] = value;
     }
-
-    // overload operators
-    VolumeSlice& operator=(const VolumeSlice& rhs) {
-        // Only do assignment if RHS is a different object from this.
-        if (this != &rhs) {
-            this->m_axis = rhs.m_axis;
-            this->m_width = rhs.m_width;
-            this->m_height = rhs.m_height;
-            this->m_pixelData = rhs.m_pixelData;
-        }
-        return *this;
-    }
-
+	
 private:
     VolumeAxis m_axis = VolumeAxis::YZAxis;
     std::size_t m_width = 0;
@@ -313,19 +289,6 @@ public:
     }
     const std::vector<uint16_t>& getRawVolumeData() const {
         return m_Data;
-    }
-
-    // overload operators
-    VolumeData& operator=(const VolumeData& rhs) {
-        // Only do assignment if RHS is a different object from this.
-        if (this != &rhs) {
-            this->m_Data = rhs.m_Data;
-            this->m_Data.shrink_to_fit();
-            this->m_Size = rhs.m_Size;
-            this->m_Spacing = rhs.m_Spacing;
-            this->m_VoxelCount = rhs.m_VoxelCount;
-        }
-        return *this;
     }
 
 private:
