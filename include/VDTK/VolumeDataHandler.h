@@ -32,7 +32,7 @@ public:
     uint16_t getRawValue(const std::size_t x, const std::size_t y, const std::size_t z) const;
     const VolumeData getVolumeData() const;
 
-    void applyWindow(const int32_t windowLevel, const int32_t windowWidth,
+    void applyWindow(WindowingFunction func, const int32_t windowCenter, const int32_t windowWidth,
                      const int32_t windowOffset);
 
     void applyGridFilter(const FilterKernel& filter);
@@ -57,7 +57,7 @@ public:
 
     const std::vector<uint16_t> getHistogram() const;
     const std::vector<uint16_t> getHistogramWidthWindowing(WindowingFunction func,
-                                                           int32_t windowLevel, int32_t windowWidth,
+                                                           int32_t windowCenter, int32_t windowWidth,
                                                            int32_t windowOffset) const;
 
     void convertEndianness();

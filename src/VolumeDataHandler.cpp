@@ -70,9 +70,11 @@ const VolumeData VolumeDataHandler::getVolumeData() const {
     return m_VolumeData;
 }
 
-void VolumeDataHandler::applyWindow(const int32_t windowCenter, const int32_t windowWidth,
+void VolumeDataHandler::applyWindow(WindowingFunction func, const int32_t windowCenter,
+                                    const int32_t windowWidth,
                                     const int32_t windowOffset) {
-    WindowFilter::applyWindow(&m_VolumeData, windowCenter, windowWidth, windowOffset,
+    WindowFilter::applyWindow(&m_VolumeData, func, windowCenter, windowWidth,
+                              windowOffset,
                               m_numberOfThreads);
 }
 
