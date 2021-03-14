@@ -1,6 +1,8 @@
 
 #include <threadpool/ThreadPool.h>
 
+#include <cmath>
+
 #include "WindowFilter.h"
 
 namespace VDTK {
