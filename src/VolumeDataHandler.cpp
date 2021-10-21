@@ -70,6 +70,14 @@ const VolumeData VolumeDataHandler::getVolumeData() const {
     return m_VolumeData;
 }
 
+const VolumeSize VolumeDataHandler::getVolumeSize() const {
+    return m_VolumeData.getSize();
+}
+
+const VolumeSpacing VolumeDataHandler::getVolumeSpacing() const {
+    return m_VolumeData.getSpacing();
+}
+
 void VolumeDataHandler::applyWindow(WindowingFunction func, const int32_t windowCenter,
                                     const int32_t windowWidth,
                                     const int32_t windowOffset) {

@@ -31,6 +31,8 @@ public:
     // gets the raw voxel value from the curren volume on a given position
     uint16_t getRawValue(const std::size_t x, const std::size_t y, const std::size_t z) const;
     const VolumeData getVolumeData() const;
+    const VolumeSize getVolumeSize() const;
+    const VolumeSpacing getVolumeSpacing() const;
 
     void applyWindow(WindowingFunction func, const int32_t windowCenter, const int32_t windowWidth,
                      const int32_t windowOffset);
