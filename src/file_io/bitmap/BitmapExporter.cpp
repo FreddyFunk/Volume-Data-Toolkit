@@ -146,7 +146,7 @@ void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToPixel)(
     // generate file name
     std::filesystem::path imageFilePath = directoryPath;
     // if path is a directory path, generic file name gets generated
-    if (!imageFilePath.has_filename()) {
+    if (std::filesystem::is_directory(imageFilePath)) {
         const std::size_t numberOfNeededZeros =
             VDTK::FileIOCommon::numberOfDigits(slice.getWidth()) -
             VDTK::FileIOCommon::numberOfDigits(sliceIndex);
@@ -154,7 +154,7 @@ void BitmapExporter::writeAxisAtIndex(const std::vector<char> (*convertToPixel)(
         fileName.append(std::string(numberOfNeededZeros, '0'));
         fileName.append(std::to_string(sliceIndex));
 
-        imageFilePath.replace_filename(std::filesystem::path(fileName));
+        imageFilePath = imageFilePath / fileName;
         imageFilePath.replace_extension("bmp");
     }
 

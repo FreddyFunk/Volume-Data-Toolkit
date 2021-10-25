@@ -148,8 +148,8 @@ typedef Vector3D<float> VolumeSpacing;
 
 class VolumeSlice {
 public:
-    VolumeSlice(const VolumeAxis axis, const std::size_t width, const std::size_t height) {
-        m_axis = axis;
+    VolumeSlice(const VolumeAxis axis, const std::size_t width, const std::size_t height)
+        : m_axis(axis), m_width(width), m_height(height) {
         m_pixelData = std::vector<uint16_t>(width * height);
     }
 
